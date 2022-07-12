@@ -24,6 +24,10 @@
     <!-- ajax   -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <!-- cookie   -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+
     <title>SUBLab</title>
 
     <style>
@@ -175,7 +179,19 @@
 
     <div class="search-box">
         <div class="login-box">
+            {% if login_status == 0 %}
             <a class="nav-link active" href="/login">로그인</a>
+            {% else %}
+            <a class="nav-link active" onclick="logout()">로그아웃</a>
+             <script>
+                //logout
+                function logout() {
+                    $.removeCookie('mytoken', {path: '/'});
+                    alert('로그아웃!');
+                    window.location.href = "/";
+                }
+            </script>
+            {% endif %}
         </div>
         <div class="input-group mb-3">
             <input type="text" id="search-menu" class="form-control" placeholder="메뉴 이름 검색" aria-label="Recipient's username"
