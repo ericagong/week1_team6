@@ -37,7 +37,7 @@ def post_recipe():
     # x = ingredients.insert_one(post)
     # print(x.inserted_id)
     # return redirect(url_for("detail", idx=x.inserted_id))
-    return jsonify({'msg': "등록이 완료되었습니다!"})
+    return jsonify({'name': name_receive+"을 등록하였습니다"})
 
 
 @app.route('/recipe', methods=['GET'])
