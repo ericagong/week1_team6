@@ -23,7 +23,7 @@ def post_recipe():
     menu_receive = request.form.get('menu')
     name_receive = request.form.get('name')
     print(bread_receive, cheese_receive, topping_receive, vege_receive, souce_receive, menu_receive)
-    # buckets = mongo.db.buckets
+    # ingredients = mongo.db.ingredients
     post = {
         'bread': bread_receive,
         'cheese': cheese_receive,
@@ -33,8 +33,8 @@ def post_recipe():
         'menu': menu_receive,
         'name': name_receive
     }
-    db.recepies.insert_one(post)
-    # x = buckets.insert_one(post)
+    db.ingredients.insert_one(post)
+    # x = ingredients.insert_one(post)
     # print(x.inserted_id)
     # return redirect(url_for("detail", idx=x.inserted_id))
     return jsonify({'msg': "등록이 완료되었습니다!"})
