@@ -25,7 +25,6 @@ def menu_rank():
 @app.route('/')
 def home():
     menu_ranks = menu_rank()
-    print(menu_ranks)
     menu_name = []
     for menu in menu_ranks:
         m = db.ingredients.find_one({'_id': ObjectId(menu['_id'])})
