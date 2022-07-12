@@ -59,6 +59,25 @@
 		}
 	</style>
 	<script>
+		function login() {
+			let given_ID = $('#ID').val();
+			let given_PW = $('#PW').val();
+			console.log(`given_ID: ${given_ID}, given_PW: ${given_PW}`);
+			$.ajax({
+				type: "GET",
+				url: '/api/signin',
+				data: { "id": given_ID, "password": given_PW },
+				success: function ({ error }) {
+					if (!error) {
+						// TODO JWT 
+						$(location).attr('href', 'https://lodcalhost/home');
+					}
+					else {
+						// TODO error 처리
+					}
+				}
+			})
+		}
 	</script>
 </head>
 
@@ -68,12 +87,12 @@
 		<form class="signup-form" id="needs-validation" novalidate>
 			<a class="nav-link active" aria-current="page" href="/signup">회원가입</a>
 			<div class="col-md-10">
-				<label for="validationCustom01" class="form-label">아이디</label>
-				<input type="text" class="form-control" id="validationCustom01" value="" required>
+				<label for="ID" class="form-label">아이디</label>
+				<input type="text" class="form-control" id="ID" value="" required>
 			</div>
 			<div class="col-md-10">
-				<label for="validationCustom02" class="form-label">비밀번호</label>
-				<input type="text" class="form-control" id="validationCustom02" value="" required>
+				<label for="PW" class="form-label">비밀번호</label>
+				<input type="text" class="form-control" id="PW" value="" required>
 			</div>
 			<button class="btn btn-primary" id="submit-btn" type="submit">로그인</button>
 		</form>
