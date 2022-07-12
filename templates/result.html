@@ -110,12 +110,19 @@
 			width: 100%;
 		}
     </style>
+	 <script>
+        <!-- 검색  -->
+        function searchMenu() {
+            let menuVal = $('#seachMenu').val();
+            window.location.href = `/search?menu_give=${menuVal}`;
+        }
+    </script>
 </head>
 
 <body>
 <div class="main container">
     <div class="logo">
-        <img href="/home" src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab" border="0">
+        <a href="/"><img src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab" border="0"></a>
     </div>
 
     <div class="search-box">
