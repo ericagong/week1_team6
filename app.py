@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import certifi
+from flask_pymongo import PyMongo
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from bson.objectid import ObjectId
 import datetime
@@ -9,10 +10,44 @@ import jwt
 
 app = Flask(__name__)
 
+
 ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.a32x0.mongodb.net/cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=ca)
+
+client = MongoClient('mongodb+srv://test:sparta@cluster0.a32x0.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
+mongo = PyMongo(app)
+
+
+@app.route('/post_recipe', methods=['POST'])
+def post_recipe():
+    bread_receive = request.form.get('bread')
+    cheese_receive = request.form.get('cheese')
+    topping_receive = request.form.get("topping")
+    vege_receive = request.form.get('vege')
+    souce_receive = request.form.get('souce')
+    menu_receive = request.form.get('menu')
+    name_receive = request.form.get('name')
+    print(bread_receive, cheese_receive, topping_receive, vege_receive, souce_receive, menu_receive)
+    # ingredients = mongo.db.ingredients
+    post = {
+        'bread': bread_receive,
+        'cheese': cheese_receive,
+        'topping': topping_receive,
+        'vege': vege_receive,
+        'souce': souce_receive,
+        'menu': menu_receive,
+        'name': name_receive
+    }
+    db.ingredients.insert_one(post)
+    # x = ingredients.insert_one(post)
+    # print(x.inserted_id)
+    # return redirect(url_for("detail", idx=x.inserted_id))
+    return jsonify({'name': name_receive+"을 등록하였습니다"})
+
+
+@app.route('/recipe', methods=['GET'])
+def recipe():
+    return render_template('recipe.html')
 
 # 토큰을 위한 시크릿키
 SECRET_KEY = 'SUBLab'
@@ -28,6 +63,7 @@ def menu_rank():
     # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 5위까지만 보여주는 함수
     menu_ranks = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}, {'$sort': {'avg_star': -1}}, {'$limit': 5}]))
     return menu_ranks
+
 
 @app.route('/')
 def home():
