@@ -15,31 +15,6 @@ app.config["MONGO_URI"] = "mongodb+srv://test:sparta@cluster0.a32x0.mongodb.net/
 mongo = PyMongo(app)
 
 
-# <-- bs4크롤링 -->
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://www.subway.co.kr/utilizationSubway',headers=headers)
-
-soup = BeautifulSoup(data.text, 'html.parser')
-
-trs = soup.select('#content > div > div.pd_list_wrapper > ul')
-
-#li:nth-child(4) > div.img > img
-
-for tr in trs:
-
-    menuimg = tr.select_one({"img":'<img onerror="this.src='/images/common/noneImage.jpg'" src="/upload/menu/터키베이컨아보카도_20220426035102168.png" alt="터키 베이컨 아보카도">',"menu":터키 베이컨 아보카도})
-    breadimg = tr.select_one('li:nth-child(2) > div > img')['src']
-    vegeimg = tr.select_one('li:nth-child(4) > div > img')['src']
-    souceimg = tr.select_one('li:nth-child(4) > div > img')['src']
-
-    doc = {
-        'menuimg':menuimg,
-        'breadimg':breadimg,
-        'vegeimg':vegeimg,
-        'souceimg':souceimg
-    }
-    db.images.insert_one(doc)
-
 
 
 
