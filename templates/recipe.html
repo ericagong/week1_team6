@@ -1,10 +1,467 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서브웨이 | SUBLAB</title>
 </head>
 <body>
+
+
+<script>
+    function NoMultiChk(chk) {
+        var obj = document.getElementsByName("menu");
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i] != chk) {
+                obj[i].checked = false;
+            }
+        }
+    }
+</script>
+
+<script>
+    function NoChk(chk) {
+        var obj = document.getElementsByName("bread");
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i] != chk) {
+                obj[i].checked = false;
+            }
+        }
+    }
+</script>
+<!--<script>-->
+<!--    function alertClassName() {-->
+<!--        var alert = this.state.alert-->
+<!--        return alert === false ? 'name-alert' : 'name-alert-view'-->
+<!--    }-->
+
+<!--    return (-->
+<!--        <div className={this.alertClassName()}>-->
+<!--            <h5>레시피 이름은 필수적으로 입력해야 합니다.</h5>-->
+<!--        </div>-->
+<!--    );-->
+<!--</script>-->
+
+<script>
+    $(document).ready(function () {
+        $('input:checkbox[name = menu]')
+            .each(function (index) {
+                $(this).attr("menu-index", index);
+            })
+            .click(function () {
+                var index = $(this).attr("area-index");
+                $(".menu[menu-index=" + index + "]").addClass("clicked_menu");
+                $(".menu[menu-index!=" + index + "]").removeClass("clicked_menu");
+            });
+    });
+
+    $(document).ready(function () {
+        $('input:checkbox[name = bread]')
+            .each(function (index) {
+                $(this).attr("bread-index", index);
+            })
+            .click(function () {
+                var index = $(this).attr("area-index");
+                $(".bread[bread-index=" + index + "]").addClass("clicked_bread");
+                $(".bread[bread-index!=" + index + "]").removeClass("clicked_bread");
+            });
+    });
+
+    $(document).ready(function () {
+        $('input:checkbox[name = topping]')
+            .each(function (index) {
+                $(this).attr("topping-index", index);
+            })
+            .click(function () {
+                var index = $(this).attr("area-index");
+                $(".topping[topping-index=" + index + "]").addClass("clicked_topping");
+                $(".topping[topping-index!=" + index + "]").removeClass("clicked_topping");
+            });
+    });
+
+    $(document).ready(function () {
+        $('input:checkbox[name = vege]')
+            .each(function (index) {
+                $(this).attr("vege-index", index);
+            })
+            .click(function () {
+                var index = $(this).attr("area-index");
+                $(".vege[vege-index=" + index + "]").addClass("clicked_vege");
+                $(".vege[vege-index!=" + index + "]").removeClass("clicked_vege");
+            });
+    });
+
+    $(document).ready(function () {
+        $('input:checkbox[name = cheese]')
+            .each(function (index) {
+                $(this).attr("cheese-index", index);
+            })
+            .click(function () {
+                var index = $(this).attr("area-index");
+                $(".cheese[cheese-index=" + index + "]").addClass("clicked_cheese");
+                $(".cheese[cheese-index!=" + index + "]").removeClass("clicked_cheese");
+            });
+    });
+
+    $(document).ready(function () {
+        $('input:checkbox[name = souce]')
+            .each(function (index) {
+                $(this).attr("souce-index", index);
+            })
+            .click(function () {
+                var index = $(this).attr("area-index");
+                $(".souce[souce-index=" + index + "]").addClass("clicked_souce");
+                $(".souce[souce-index!=" + index + "]").removeClass("clicked_souce");
+            });
+    });
+
+</script>
+
+<form name="form" method="post" action="/post_recipe">
+    <!-- bar -->
+    <div class="bar">
+        <div class="bar">
+            레시피 이름
+        </div>
+    </div>
+    <div>
+        <!-- main -->
+        <div class="main">
+            <!-- buttons -->
+            <div class="select">
+                <!-- write -->
+                <div class="paper">
+                    <textarea id="post-content" name="name" placeholder=""></textarea>
+                </div>
+
+                <div class="area">
+                    <p>메 뉴</p>
+                    <div class='checkbox-group'>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="베지 아보카도" id='veggie'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>베지 아보카도</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name="menu" type='checkbox' value="로스트 치킨 아보카도" id='RCA'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>로스트 치킨 아보카도</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name="menu" type='checkbox' value="터키 베이컨 아보카도" id='TBA'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>터키 베이컨 아보카도</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name="menu" type='checkbox' value="로티세리 바비큐 치킨" id='RBC'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>로티세리 바비큐 치킨</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name="menu" type='checkbox' value="이탈리안 비엠티" id='Italian'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>이탈리안 비엠티</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="쉬림프" id='Shrimp'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>쉬림프</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="로스트 치킨" id='RC'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>로스트 치킨</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="에그마요" id='EGG'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>에그마요</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="K-바비큐" id='KBBQ'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>K-바비큐</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="풀드 포크 바비큐" id='PPB'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>풀드 포크 바비큐</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="비엘티" id='BLT'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>비엘티</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="미트볼" id='MEAT'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>미트볼</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="햄" id='HAM'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>햄</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="참치" id='TUNA'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>참치</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="세브웨이 클럽" id='CULB'
+                                   onclick="NoMultiChk(this)">
+                            <span class='inner-label'>세브웨이 클럽</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="터키" id='TURKEY'
+                                   onclick="NoMultiChk(this)"/>
+                            <span class='inner-label'>터키</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="베지" id='Delite'
+                                   onclick="NoMultiChk(this)"/>
+                            <span class='inner-label'>베지</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="스테이크&치즈" id='Steak'
+                                   onclick="NoMultiChk(this)"/>
+                            <span class='inner-label'>스테이크&치즈</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="스파이시 이탈리안" id='spicy'
+                                   onclick="NoMultiChk(this)"/>
+                            <span class='inner-label'>스파이시 이탈리안</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="menu" name='menu' type='checkbox' value="치킨 데리야끼" id='Teriyaki'
+                                   onclick="NoMultiChk(this)"/>
+                            <span class='inner-label'>치킨 데리야끼</span>
+                        </label>
+
+                    </div>
+                </div>
+                <!-- 빵 -->
+                <div class="bread">
+                    <p>빵</p>
+                    <div class='checkbox-group'>
+                        <label class='checkbox-label'>
+                            <input class="bread" name='bread' type='checkbox' value="허니오트" id='honey'
+                                   onclick="NoChk(this)"/>
+                            <span class='inner-label'>허니오트</span>
+                        </label>
+                        <label class='radio-label'>
+                            <input class="bread" name='bread' type='checkbox' value="하티" id='Hearty'
+                                   onclick="NoChk(this)"/>
+                            <span class='inner-label'>하티</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="bread" name='bread' type='checkbox' value="위트" id='Wheat'
+                                   onclick="NoChk(this)"/>
+                            <span class='inner-label'>위트</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="bread" name='bread' type='checkbox' value="파마산 오레가노" id='Parmesan'
+                                   onclick="NoChk(this)"/>
+                            <span class='inner-label'>파마산 오레가노</span>
+                        </label>
+                        <label class='checkbox-label'>
+                            <input class="bread" name='bread' type='checkbox' value="화이트" id='white'
+                                   onclick="NoChk(this)"/>
+                            <span class='inner-label'>화이트</span>
+                        </label>
+                        <label class='radio-label'>
+                            <input class="bread" name='bread' type='checkbox' value="플랫브레드" id='Flat'
+                                   onclick="NoChk(this)"/>
+                            <span class='inner-label'>플랫브레드</span>
+                        </label>
+                    </div>
+                </div>
+                <!-- 추가토핑 -->
+                <div class="topping">
+                    <p>추가 토핑</p>
+                    <div class="center">
+                        <div class='checkbox-group'>
+                            <label class='checkbox-label'>
+                                <input class="topping" name='topping' type='checkbox' id='Mt' value="미트 추가">
+                                <span class='inner-label'>미트 추가</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='SDU' value="쉬림프 더블업">
+                                <span class='inner-label'>쉬프림 더블업</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='EM' value="에그마요">
+                                <span class='inner-label'>에그마요</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='Omelet' value="오믈렛">
+                                <span class='inner-label'>오믈렛</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='Avocado' value="아보카도">
+                                <span class='inner-label'>아보카도</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='Bacon' value="베이컨">
+                                <span class='inner-label'>베이컨</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='Pepperoni' value="페퍼로니">
+                                <span class='inner-label'>페퍼로니</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="topping" name="topping" type='checkbox' id='chs' value="치즈 추가">
+                                <span class='inner-label'>치즈 추가</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- 야채 -->
+                <div class="vege">
+                    <p>야 채</p>
+                    <div class="center">
+                        <div class='checkbox-group'>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="양상추" id='LTT'>
+                                <span class='inner-label'>양상추</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="토마토" id='TMT'>
+                                <span class='inner-label'>토마토</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="오이" id='CCB'>
+                                <span class='inner-label'>오이</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="피망" id='PPP'>
+                                <span class='inner-label'>피망</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="양파" id='RO'>
+                                <span class='inner-label'>양파</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="피클" id='PICKLES'>
+                                <span class='inner-label'>피클</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="올리브" id='OLV'>
+                                <span class='inner-label'>올리브</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="할라피뇨" id='JPS'>
+                                <span class='inner-label'>할라피뇨</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="vege" name='vege' type='checkbox' value="아보카도" id='ACD'>
+                                <span class='inner-label'>아보카도</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- 치즈 -->
+                <div class="cheese">
+                    <p>치 즈</p>
+                    <div class="center">
+                        <div class='checkbox-group'>
+                            <label class='checkbox-label'>
+                                <input class="cheese" name='cheese' type='checkbox' value="아메리칸 치즈" id='AMI'>
+                                <span class='inner-label'>아메리칸 치즈</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="cheese" name='cheese' type='checkbox' value="슈레드 치즈" id='SDDH'>
+                                <span class='inner-label'>슈레드 치즈</span>
+                            </label>
+                            <label class='radio-label'>
+                                <input class="cheese" name='cheese' type='checkbox' value="모차렐라 치즈" id='MZZ'>
+                                <span class='inner-label'>모차렐라 치즈</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- 소스 -->
+                <div class="souce">
+                    <p>소 스</p>
+                    <div class="center">
+                        <div class='checkbox-group'>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="랜치" id='Ranch'>
+                                <span class='inner-label'>랜치</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="마요네즈" id='MYO'>
+                                <span class='inner-label'>마요네즈</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="스위트 어니언" id='SWEET'>
+                                <span class='inner-label'>스위트 어니언</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="허니 머스타드" id='HMT'>
+                                <span class='inner-label'>허니 머스타드</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="스위트 칠리" id='SCH'>
+                                <span class='inner-label'>스위트 칠리</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="핫 칠리" id='HOT'>
+                                <span class='inner-label'>핫 칠리</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="사우스웨스트 치폴레" id='SWC'>
+                                <span class='inner-label'>사우스웨스트 치폴레</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="머스타드" id='YM'>
+                                <span class='inner-label'>머스타드</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="홀스래디쉬" id='HSRD'>
+                                <span class='inner-label'>홀스래디쉬</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="올리브 오일" id='OIL'>
+                                <span class='inner-label'>올리브 오일</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="레드와인식초" id='RWV'>
+                                <span class='inner-label'>레드와인식초</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="소금" id='salt'>
+                                <span class='inner-label'>소금</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="후추" id='BP'>
+                                <span class='inner-label'>후추</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="스모크 바비큐" id='SBBQ'>
+                                <span class='inner-label'>스모크 바비큐</span>
+                            </label>
+                            <label class='checkbox-label'>
+                                <input class="souce" name='souce' type='checkbox' value="이탈리안 드레싱" id='IDSS'>
+                                <span class='inner-label'>이탈리안 드레싱</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- button -->
+        <div class="button">
+            <button type="submit" class="button2" onclick="postRecipe()">
+                작 성 완 료
+            </button>
+        </div>
+    </div>
+</form>
+</footer>
+</div>
 
 </body>
 </html>
