@@ -36,7 +36,15 @@
 
             text-align: center;
 
-            margin-bottom: 100px;
+            margin-bottom: 50px;
+        }
+
+        .login-status-bottom {
+            margin-bottom: 80px;
+        }
+
+        .login-status-height {
+            height: 200px;
         }
 
         .container img {
@@ -106,14 +114,14 @@
             margin: -30px -40px -30px 0px;
         }
 
-		.list-row {
-			width: 100%;
-		}
+        .list-row {
+            width: 100%;
+        }
     </style>
-	 <script>
+    <script>
         <!-- 검색  -->
         function searchMenu() {
-            let menuVal = $('#seachMenu').val();
+            let menuVal = $('#search-menu').val();
             window.location.href = `/search?menu_give=${menuVal}`;
         }
     </script>
@@ -130,17 +138,24 @@
             <a class="nav-link active" href="/login">로그인</a>
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="메뉴 이름 검색" aria-label="Recipient's username"
+            <input type="text" id="search-menu" class="form-control" placeholder="메뉴 이름 검색" aria-label="Recipient's username"
                    aria-describedby="button-addon2">
-            <button class="recipe-btn btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+            <button class="recipe-btn btn btn-outline-secondary" type="button" id="button-addon2"
+                    onclick="searchMenu()">검색
+            </button>
         </div>
-
+        {% if login_status == 1 %}
+        <script>
+            $('.container').addClass('login-status-bottom');
+        </script>
         <button type="button" class="w-100 btn btn-success">레시피 등록</button>
+        {% endif %}
     </div>
 
     <div class="main-list" id="recipe-list">
         <div class="list-group">
-			{% for menu in menu_list %}
+            {% if menu_list != 0 %}
+            {% for menu in menu_list %}
             <div class="list-row">
                 <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="menu-item d-flex w-100 justify-content-between">
@@ -151,7 +166,12 @@
                     </div>
                 </a>
             </div>
-			{% endfor %}
+            {% endfor %}
+            {% else %}
+            <div>
+                <h3 style="color: black">{{msg}}</h3>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
