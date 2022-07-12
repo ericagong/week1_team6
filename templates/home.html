@@ -17,9 +17,9 @@
             crossorigin="anonymous"></script>
 
     <!-- jQuery   -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"-->
+    <!--            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="-->
+    <!--            crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
 
     <!-- ajax   -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -117,7 +117,51 @@
         .w-20 {
             width: 20%;
         }
+
+        .main-list {
+			margin: 20px auto 0px auto;
+			width: 95%;
+			max-width: 1200px;
+		}
+
+		.card-item img:hover {
+			cursor: pointer;
+
+			/*width: 20%;*/
+			float: left;
+			margin: 10px;
+
+			/* 마우스 오버시 이미지 확대 효과 */
+			transform: scale(1.1);
+			-webkit-transform: scale(1.1);
+			-moz-transform: scale(1.1);
+			-ms-transform: scale(1.1);
+			-o-transform: scale(1.1);
+
+			cursor: pointer;
+		}
+
+		.menu-item {
+			height: 50px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.menu-item img {
+			width: 45px;
+			height: 50px;
+			margin: -30px -40px -30px 0px;
+		}
     </style>
+    <script>
+        <!-- 검색  -->
+        function searchMenu() {
+            let menuVal = $('#seachMenu').val();
+            window.location.href = `/search?menu_give=${menuVal}`;
+        }
+    </script>
 </head>
 <body>
 <div class="main container">
@@ -130,9 +174,12 @@
             <a class="nav-link active" href="/login">로그인</a>
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="메뉴 이름 검색" aria-label="Recipient's username"
+            <input id="seachMenu" type="text" class="form-control" placeholder="메뉴 이름 검색"
+                   aria-label="Recipient's username"
                    aria-describedby="button-addon2">
-            <button class="recipe-btn btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+            <button class="recipe-btn btn btn-outline-secondary" type="button" id="button-addon2"
+                    onclick="searchMenu()">검색
+            </button>
         </div>
 
         <button type="button" class="w-100 btn btn-success">레시피 등록</button>
@@ -212,6 +259,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
