@@ -1,10 +1,313 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title></title>
+</head>
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .service_name {
+        text-align: center;
+        padding-top: 31px;
+    }
+
+    .recipe_name {
+        position: absolute;
+        top: 25%;
+        margin: 20px auto;
+        text-align: center;
+        width: 95%;
+        max-width: 700px;
+        border: 0;
+        solid: green;
+        background-color: green;
+        height: 60px;
+        color: white;
+        font-size: 40px;
+
+    }
+
+    .writer_box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+
+    }
+
+    .rank_box {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        font-size: 50px;
+
+    }
+
+    .table {
+        position: absolute;
+        top: 145%;
+        width: 91%;
+        left: 4%;
+    }
+
+    #table_box3 {
+        width: 60%;
+        text-align: center;
+        margin-bottom: 0px;
+    }
+
+    #table_box2 {
+        width: 13%;
+        text-align: center;
+    }
+
+    #table_box4 {
+        width: 27%;
+        text-align: center;
+    }
+
+    .recommender {
+        text-align: center;
+    }
+
+    .recommender_rank {
+        text-align: end;
+    }
+
+    .select_list {
+        position: absolute;
+        top: 105%;
+        left: 8%;
+        font-size: 20px;
+        color: dimgray;
+        text-align: center;
+    }
+
+    /*.middle_line {*/
+    /*    position: absolute;*/
+    /*    top: 98%;*/
+    /*    left: 7.5%;*/
+    /*    padding: 0px;*/
+    /*    width: 83.8%;*/
+    /*    height: 60px;*/
+
+    /*    color : dimgray;*/
+    /*    font-size: 40px;*/
+    /*    text-align: start;*/
+    /*}*/
+
+    .wrap1 {
+        position: absolute;
+        top: 98%;
+        left: 7.5%;
+        color: dimgray;
+        font-size: 40px;
+        text-align: center;
+    }
+
+    .wrap2 {
+        position: absolute;
+        color: dimgray;
+        font-size: 40px;
+        text-align: center;
+    }
+
+    .wrap3 {
+        position: absolute;
+        color: dimgray;
+        font-size: 40px;
+        text-align: center;
+    }
+
+    .wrap4 {
+        position: absolute;
+        color: dimgray;
+        font-size: 40px;
+        text-align: center;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        show_comment()
+    });
+
+    function save_comment() {
+        // let name = $('#name').val()
+        let comment = $('#comment').val();
+        let star = $('#star').val();
+        console.log(comment, star);
+        $.ajax({
+            type: 'POST',
+            url: '/writers',
+            data: {
+                'name_give': 'name',
+                'comment_give': comment, 'star_give': star
+            },
+            success: function (response) {
+                console.log(response)
+                window.location.reload()
+            }
+        })
+    }
+
+
+    function show_comment() {
+        $.ajax({
+            type: 'GET',
+            url: '/writers',
+            data: {},
+            success: function (response) {
+                let rows = response['writers']
+                for (let i = 0; i < rows.length; i++) {
+                    let name = rows[i]['name']
+                    let comment = rows[i]['comment']
+                    let star = "⭐".repeat(rows[i]['star'])
+
+
+                    console.log(name, comment, star)
+
+                    let temp_html = `    <tr>
+                                                <th scope="row" class="recommender_name">${name}</th>
+                                                <td class="recommender_comment">${comment}</td>
+                                                <td class="recommender_rank">${star}</td>
+                                            </tr>`
+                    $('#comment_box').append(temp_html)
+                }
+
+            }
+        })
+    }
+
+</script>
+<body>
+<div class="service_name">
+    <a href="home.html" height="5" width="10">
+        <img src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab"
+             width="256px" height="76px">
+    </a>
+</div>
+<div class="main container">
+    <div class="recipe_name">
+        <strong><span class="box">로스트 치킨 아보카도 (Roasted Chicken Avocado)</span></strong>
+    </div>
+    <div class="writer">
+        <div class="writer_box">장우의 레시피!</div>
+    </div>
+    <div class="rank">
+        <div class="rank_box"> ⭐ (5.0)</div>
+    </div>
+
+    <table class="select_list">
+        <tr>
+            <div class="total_wrap">
+                <div class="wrap1">
+                    <td class="bread"><b>✅ 빵</b><br>
+                        <img src="https://www.subway.co.kr/images/menu/img_recipe_b01.jpg"
+                             height="150px" width="150px">
+                        <br># 플랫 브레드
+                    </td>
+                </div>
+                <div class="wrap2">
+                    <td class="topping"><b>✅ 추가 토핑</b><br>
+                        <img src="https://www.subway.co.kr/upload/menu/img_toppping_02.png
+        " height="150px" width="150px">
+                        <br># 에그마요
+                    </td>
+                </div>
+                <div class="wrap3">
+                    <td class="sauce"><b>✅ 소스</b><br>
+                        <img src="https://www.subway.co.kr/images/menu/img_recipe_s01.jpg"
+                             height="150px" width="150px">
+                        <br># 렌치소스
+                    </td>
+                </div>
+                <div class="wrap4">
+                    <td class="cheeze"><b>✅ 치즈</b><br>
+                        <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
+                             height="150px" width="150px">
+                        <br># 아메리칸 치즈
+                    </td>
+                    <td class="cheeze"><br>
+                        <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
+                             height="150px" width="150px">
+                        <br># 아메리칸 치즈
+                    </td>
+                    <td class="cheeze"><br>
+                        <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
+                             height="150px" width="150px">
+                        <br># 아메리칸 치즈
+
+                </div>
+            </div>
+        </tr>
+    </table>
+</div>
+<div class="table">
+    <table class="table caption-top">
+        <caption></caption>
+        <thead>
+        <tr>
+
+            <th scope="col" id="table_box2">
+                <!--드롭다운버튼-->
+                <!--                <div class="btn-group">-->
+                <!--                    <button type="button" class="btn btn-success dropdown-toggle find-btn1" data-bs-toggle="dropdown"-->
+                <!--                            aria-expanded="false">-->
+                <!--                        평점-->
+                <!--                    </button>-->
+                <select class="form-select" id="star">
+                    <option selected>-- 선택하기 --</option>
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                </select>
+</div>
+</th>
+</th>
+<th scope="col" id="table_box3">
+    <!—댓글입력 란—>
+    <div class="mb-0 comment_box">
+        <label for="exampleFormControlInput1" class="form-label"></label>
+        <input type="text" class="form-control" id="comment" placeholder="댓글을 남겨주세요!">
+    </div>
+</th>
+
+<th scope="col" id="table_box4">
+    <!—작성하기 버튼—>
+    <button onclick="save_comment()" type="button" class="btn btn-outline-success">작성하기</button>
+</th>
+</tr>
+</thead>
+<tbody id="comment_box">
+
+</tbody>
+</table>
+</div>
 </body>
+
 </html>
