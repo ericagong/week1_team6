@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 import certifi
-from flask_pymongo import PyMongo
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from bson.objectid import ObjectId
 import datetime
@@ -15,7 +14,6 @@ ca = certifi.where()
 
 client = MongoClient('mongodb+srv://test:sparta@cluster0.a32x0.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
-mongo = PyMongo(app)
 
 
 @app.route('/post_recipe', methods=['POST'])
@@ -60,8 +58,8 @@ SECRET_KEY = 'SUBLab'
 db.ingredients.create_index([('$**', 'text')]) #전체
 
 def menu_rank():
-    # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 5위까지만 보여주는 함수
-    menu_ranks = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}, {'$sort': {'avg_star': -1}}, {'$limit': 5}]))
+    # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 4위까지만 보여주는 함수
+    menu_ranks = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}, {'$sort': {'avg_star': -1}}, {'$limit': 4}]))
     return menu_ranks
 
 
@@ -98,7 +96,7 @@ def search():
         return render_template('result.html', menu_list=menu_list)
     else:
         msg = "검색 결과가 없습니다."
-        menu_list = 0
+        menu_list = []
         return render_template('result.html', menu_list=menu_list, msg=msg)
 
 @app.route('/login')
