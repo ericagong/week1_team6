@@ -17,16 +17,16 @@ db = client.dbsparta
 
 @app.route('/post_recipe', methods=['POST'])
 def post_recipe():
-    bread_receive =  request.form.get('bread')
-    cheese_receive = request.form.get('cheese')
-    topping_receive = request.form.get("topping")
-    vege_receive = request.form.get('vege')
-    souce_receive = request.form.get('souce')
-    menu_receive = request.form.get('menu')
-    name_receive = request.form.get('name')
-    additional_receive = request.form.get('additional')
-    print(bread_receive, cheese_receive, topping_receive, vege_receive, souce_receive, menu_receive)
-    # ingredients = mongo.db.ingredients
+    bread_receive =  request.form.getlist('bread')
+    cheese_receive = request.form.getlist('cheese')
+    topping_receive = request.form.getlist("topping")
+    vege_receive = request.form.getlist('vege')
+    souce_receive = request.form.getlist('souce')
+    menu_receive = request.form.getlist('menu')
+    name_receive = request.form.getlist('name')
+    additional_receive = request.form.getlist('additional')
+    # print(bread_receive, cheese_receive, topping_receive, vege_receive, souce_receive, menu_receive)
+    # recipes = mongo.db.recipes
     post = {
         'additional':additional_receive,
         'bread': bread_receive,
@@ -37,11 +37,11 @@ def post_recipe():
         'menu': menu_receive,
         'name': name_receive
     }
-    db.ingredients.insert_one(post)
+    db.recipes.insert_one(post)
     # x = ingredients.insert_one(post)
     # print(x.inserted_id)
-    # return redirect(url_for("detail", idx=x.inserted_id))
-    return jsonify({'name': name_receive+"을 등록하였습니다"})
+    return redirect(url_for("home", msg=name_receive+"을 등록하였습니다"))
+    # return jsonify({'name': name_receive+"을 등록하였습니다"})
 
 
 @app.route('/recipe', methods=['GET'])
