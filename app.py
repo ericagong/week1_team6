@@ -50,11 +50,11 @@ def recipe():
 SECRET_KEY = 'SUBLab'
 
 # 인덱스 삭제
-# db.ingredients.drop_indexes()
+# db.recipes.drop_indexes()
 
 # 검색을 위한 text 인덱스 생성
-# db.ingredients.create_index([('menu', 'text')]) #메뉴
-db.ingredients.create_index([('$**', 'text')]) #전체
+# db.recipes.create_index([('menu', 'text')]) #메뉴
+db.recipes.create_index([('$**', 'text')]) #전체
 
 def menu_rank():
     # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 4위까지만 보여주는 함수
@@ -72,8 +72,9 @@ def home():
     menu_id = []
     for menu in menu_ranks:
         # 메뉴 아이디에 해당되는 메뉴 정보 가져오기
-        m = db.ingredients.find_one({'_id': ObjectId(menu['_id'])})
-        menu_name.append(m['name'])
+        m = db.recipes.find_one({'_id': ObjectId(menu['_id'])})
+        print(m)
+        menu_name.append(m['menu'])
         menu_id.append(m['_id'])
     token_receive = request.cookies.get('mytoken')
     if token_receive is not None:
@@ -93,7 +94,7 @@ def home():
 def search():
     menu_receive = request.args.get('menu_give')
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
-    menu_list = list(db.ingredients.find({'$text': {'$search': menu_receive}}))
+    menu_list = list(db.recipes.find({'$text': {'$search': menu_receive}}))
     menu_star_avg = []
     result = []
     for i in range(len(menu_list)):
@@ -132,7 +133,7 @@ def search():
 def detail():
     menu_id = request.args.get('menu_id')
     star = request.args.get('avg_star')
-    receipe_info = db.ingredients.find_one({"_id": ObjectId(menu_id)})
+    receipe_info = db.recipes.find_one({"_id": ObjectId(menu_id)})
     print("detail페이지 접속했을 때 레시피 아이디 : "+str(receipe_info['_id']))
     token_receive = request.cookies.get('mytoken')
     id_receive = request.cookies.get('userID')
@@ -152,7 +153,7 @@ def add():
     doc = {
         'name': name_receive,
         'comment': address_receive,
-        'star': star_receive,
+        'star': int(star_receive),
         'menu_id' : ObjectId(menuId_receive)
     }
     db.comments.insert_one(doc)
