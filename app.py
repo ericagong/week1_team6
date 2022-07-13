@@ -73,7 +73,7 @@ def home():
     for menu in menu_ranks:
         # 메뉴 아이디에 해당되는 메뉴 정보 가져오기
         m = db.ingredients.find_one({'_id': ObjectId(menu['_id'])})
-        menu_name.append(m['menu'])
+        menu_name.append(m['name'])
         menu_id.append(m['_id'])
     token_receive = request.cookies.get('mytoken')
     if token_receive is not None:
