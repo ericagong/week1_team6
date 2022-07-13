@@ -140,12 +140,6 @@
             let menuVal = $('#search-menu').val();
             window.location.href = `/search?menu_give=${menuVal}&`;
         }
-
-        function goDetail() {
-            let menuId = $('#menu-id').val();
-            let avgStar = $('#avg-star').val();
-            window.location.href=`/detail?menu_id=${menuId}&avg_star=${avgStar}`;
-        }
     </script>
 </head>
 
@@ -182,7 +176,7 @@
         <script>
             $('.container').addClass('login-status-bottom');
         </script>
-        <button type="button" class="w-100 btn btn-success">레시피 등록</button>
+        <button type="button" class="w-100 btn btn-success" onclick="window.location.href='/recipe'">레시피 등록</button>
         {% endif %}
     </div>
 
@@ -191,14 +185,12 @@
             {% if menu_list != 0 %}
             {% for menu in menu_list %}
             <div class="list-row">
-                    <div class="menu-item d-flex w-100 justify-content-between" onclick="goDetail()">
-                        <input id="menu-id" value="{{menu_list[loop.index0]['_id']}}" hidden> <!--  detail페이지로 가져갈 메뉴 id -->
+                    <div class="menu-item d-flex w-100 justify-content-between" onclick="window.location.href=`/detail?menu_id={{menu_list[loop.index0]['_id']}}&avg_star={{menu_ranks[loop.index0]}}`">
                         <img src="https://i.ibb.co/pwqc5nc/subwaylogo.png">
-                        <h5 class="mb-1">{{menu.menu}}</h5>
+                        <h5 class="mb-1">{{menu.name}}</h5>
                         <p class="mb-1">평점 : {{menu_ranks[loop.index0]}}</p>
-                        <small>{{menu.name}}</small>
+                        <small>{{menu.menu}}</small>
                     </div>
-                    <input id="avg-star" value="{{menu_ranks[loop.index0]}}" hidden>
                 </a>
             </div>
             {% endfor %}

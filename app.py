@@ -133,6 +133,7 @@ def detail():
     menu_id = request.args.get('menu_id')
     star = request.args.get('avg_star')
     receipe_info = db.ingredients.find_one({"_id": ObjectId(menu_id)})
+    print("detail페이지 접속했을 때 레시피 아이디 : "+str(receipe_info['_id']))
     token_receive = request.cookies.get('mytoken')
     id_receive = request.cookies.get('userID')
     if token_receive is not None:
@@ -152,7 +153,7 @@ def add():
         'name': name_receive,
         'comment': address_receive,
         'star': star_receive,
-        'menu_id' : menuId_receive
+        'menu_id' : ObjectId(menuId_receive)
     }
     db.comments.insert_one(doc)
 
@@ -161,6 +162,7 @@ def add():
 @app.route("/comment", methods=["GET"])
 def comments_get():
     menu_id = request.args.get('menu_id')
+    print(menu_id)
     comment_list = list(db.comments.find({'menu_id':ObjectId(menu_id)}, {'_id': False, 'menu_id': False}))
     print(comment_list)
     return jsonify({'comments': comment_list})
