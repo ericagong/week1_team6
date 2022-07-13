@@ -69,58 +69,80 @@ SECRET_KEY = 'SUBLab'
 def home():
     menu_ranks = menu_rank()
     menu_name = []
+    menu_id = []
     for menu in menu_ranks:
         # 메뉴 아이디에 해당되는 메뉴 정보 가져오기
         m = db.ingredients.find_one({'_id': ObjectId(menu['_id'])})
         menu_name.append(m['menu'])
-
+        menu_id.append(m['_id'])
     token_receive = request.cookies.get('mytoken')
     if token_receive is not None:
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             login_status = 1
-            return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
+            return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, menu_id=menu_id, login_status=login_status)
         except jwt.ExpiredSignatureError:
             return redirect(url_for("login", msg="로그인 시간이 만료되었습니다.", login_status=login_status))
         except jwt.exceptions.DecodeError:
             return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다.", login_status=login_status))
     else:
         login_status = 0
-        return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
+        return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, menu_id=menu_id, login_status=login_status)
 
 @app.route('/search')
 def search():
     menu_receive = request.args.get('menu_give')
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
-    menu_list = list(db.ingredients.find({'$text': {'$search': menu_receive}}, {'_id': False}))
-    print(menu_list)
+    menu_list = list(db.ingredients.find({'$text': {'$search': menu_receive}}))
+    menu_star_avg = []
+    result = []
+    for i in range(len(menu_list)):
+        print(menu_list[i]['_id'])
+        result = list(db.comments.aggregate([{'$group': {'_id': ObjectId(menu_list[i]['_id']), 'avg_star': {'$avg': '$star'}}}]))
+        print(result)
+        menu_star_avg.append(result[0]['avg_star'])
+        print(menu_star_avg)
+
     token_receive = request.cookies.get('mytoken')
+    msg = ''
+    if len(menu_list) != 0:
+        menu_list = menu_list
+        msg = "검색에 성공했습니다"
+    else:
+        msg = "검색 결과가 없습니다."
+        menu_list = 0
+
     if token_receive is not None:
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             login_status = 1
-            if len(menu_list) != 0:
-                return render_template('result.html', menu_list=menu_list, login_status=login_status)
-            else:
-                msg = "검색 결과가 없습니다."
-                menu_list = 0
-                return render_template('result.html', msg=msg, menu_list=menu_list, login_status=login_status)
+            return render_template('result.html', msg=msg, menu_list=menu_list, login_status=login_status,
+                                   menu_ranks=menu_star_avg)
         except jwt.ExpiredSignatureError:
-            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다.", menu_list=menu_list, login_status=login_status))
+            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다.", menu_list=menu_list, login_status=login_status,
+                                   menu_ranks=menu_star_avg))
         except jwt.exceptions.DecodeError:
-            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다.", menu_list=menu_list, login_status=login_status))
+            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다.", menu_list=menu_list, login_status=login_status,
+                                   menu_ranks=menu_star_avg))
     else:
         login_status = 0
-        if len(menu_list) != 0:
-            return render_template('result.html', menu_list=menu_list, login_status=login_status)
-        else:
-            msg = "검색 결과가 없습니다."
-            menu_list = 0
-            return render_template('result.html', msg=msg, menu_list=menu_list, login_status=login_status)
+        return render_template('result.html', msg=msg, menu_list=menu_list, login_status=login_status, menu_ranks=menu_star_avg)
 
 @app.route('/detail')
 def detail():
-    return render_template('detail.html')
+    menu_id = request.args.get('menu_id')
+    star = request.args.get('avg_star')
+    receipe_info = db.ingredients.find_one({"_id": ObjectId(menu_id)})
+    token_receive = request.cookies.get('mytoken')
+    id_receive = request.cookies.get('userID')
+    print(request.cookies)
+    print(menu_id,star,id_receive)
+    if token_receive is not None:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('detail.html' ,receipe_info=receipe_info, user_id=id_receive, star=star)
+    else:
+        return render_template('detail.html', receipe_info=receipe_info, user_id=id_receive, star=star)
+
 
 @app.route('/login')
 def login():

@@ -224,10 +224,11 @@
 					id_give: id,
 					password_give: password
 				},
-				success: function ({ ok, token, message }) {
+				success: function ({ ok, token, userID, message }) {
 					if (ok) {
 						// 브라우저에 쿠키 저장
 						document.cookie = `mytoken=${token}`
+						document.cookie = `userID=${userID}`
 						// 홈페이지로 이동
 						window.location.replace("/")
 					} else {

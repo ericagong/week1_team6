@@ -168,6 +168,12 @@
             let menuVal = $('#search-menu').val();
             window.location.href = `/search?menu_give=${menuVal}`;
         }
+
+        function goDetail() {
+            let menuId = $('#menu-id').val();
+            let avgStar = $('#avg-star').val();
+            window.location.href=`/detail?menu_id=${menuId}&avg_star=${avgStar}`;
+        }
     </script>
 </head>
 <body>
@@ -214,7 +220,8 @@
     {% if loop.index0 % 4 == 0 %}
     <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
         {% endif %}
-        <div class="col card-item">
+        <div class="col card-item" onclick="goDetail()">
+            <input id="menu-id" value="{{menu_id[loop.index0]}}" hidden> <!--  detail페이지로 가져갈 메뉴 id -->
             <div class="card h-100">
                 <img src="https://www.subway.co.kr/upload/menu/%EB%A1%9C%EC%8A%A4%ED%8A%B8%EC%B9%98%ED%82%A8%EC%95%84%EB%B3%B4%EC%B9%B4%EB%8F%84_20220426035026156.png"
                      class="card-img-top">
@@ -228,6 +235,7 @@
                     <div class="card-text-box w-20">
                         <p class="card-text">{{menu.avg_star|round(1)}}</p>
                     </div>
+                    <input id="avg-star" value="{{menu.avg_star|round(1)}}" hidden>
                 </div>
             </div>
         </div>

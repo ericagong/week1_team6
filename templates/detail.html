@@ -148,6 +148,11 @@
         text-align: center;
     }
 
+    .service_name img {
+        width: 40%;
+        height: 30%;
+        margin: 50px auto 0px auto;
+    }
 </style>
 <script>
     $(document).ready(function () {
@@ -205,8 +210,7 @@
 <body>
 <div class="service_name">
     <a href="home.html" height="5" width="10">
-        <img src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab"
-             width="256px" height="76px">
+        <a href="/"><img src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab"></a>
     </a>
 </div>
 <div class="main container">
@@ -214,10 +218,12 @@
         <strong><span class="box">로스트 치킨 아보카도 (Roasted Chicken Avocado)</span></strong>
     </div>
     <div class="writer">
-        <div class="writer_box">장우의 레시피!</div>
+        <div class="writer_box">작성자의 레시피!</div>
     </div>
     <div class="rank">
-        <div class="rank_box"> ⭐ (5.0)</div>
+        <div class="rank_box">
+            <p>⭐</p>{{star}}
+        </div>
     </div>
 
     <table class="select_list">
@@ -227,39 +233,29 @@
                     <td class="bread"><b>✅ 빵</b><br>
                         <img src="https://www.subway.co.kr/images/menu/img_recipe_b01.jpg"
                              height="150px" width="150px">
-                        <br># 플랫 브레드
+                        <br># {{receipe_info.bread}}
                     </td>
                 </div>
                 <div class="wrap2">
                     <td class="topping"><b>✅ 추가 토핑</b><br>
                         <img src="https://www.subway.co.kr/upload/menu/img_toppping_02.png
         " height="150px" width="150px">
-                        <br># 에그마요
+                        <br># {{receipe_info.topping}}
                     </td>
                 </div>
                 <div class="wrap3">
                     <td class="sauce"><b>✅ 소스</b><br>
                         <img src="https://www.subway.co.kr/images/menu/img_recipe_s01.jpg"
                              height="150px" width="150px">
-                        <br># 렌치소스
+                        <br># {{receipe_info.souce}}
                     </td>
                 </div>
                 <div class="wrap4">
                     <td class="cheeze"><b>✅ 치즈</b><br>
                         <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
                              height="150px" width="150px">
-                        <br># 아메리칸 치즈
+                        <br># {{receipe_info.cheese}}
                     </td>
-                    <td class="cheeze"><br>
-                        <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
-                             height="150px" width="150px">
-                        <br># 아메리칸 치즈
-                    </td>
-                    <td class="cheeze"><br>
-                        <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
-                             height="150px" width="150px">
-                        <br># 아메리칸 치즈
-
                 </div>
             </div>
         </tr>
@@ -272,12 +268,6 @@
         <tr>
 
             <th scope="col" id="table_box2">
-                <!--드롭다운버튼-->
-                <!--                <div class="btn-group">-->
-                <!--                    <button type="button" class="btn btn-success dropdown-toggle find-btn1" data-bs-toggle="dropdown"-->
-                <!--                            aria-expanded="false">-->
-                <!--                        평점-->
-                <!--                    </button>-->
                 <select class="form-select" id="star">
                     <option selected>-- 선택하기 --</option>
                     <option value="1">⭐</option>
