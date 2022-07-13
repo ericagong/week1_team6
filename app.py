@@ -3,6 +3,15 @@ import certifi
 from flask import Flask, render_template, request, jsonify
 import requests
 from bs4 import BeautifulSoup
+from flask_pymongo import PyMongo
+from flask import Flask, render_template, request, jsonify, redirect, url_for
+from bson.objectid import ObjectId
+import datetime
+from datetime import datetime, timedelta
+import hashlib
+import jwt
+
+app = Flask(__name__)
 
 ca = certifi.where()
 
@@ -11,72 +20,6 @@ db = client.dbsparta
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb+srv://test:sparta@cluster0.a32x0.mongodb.net/?retryWrites=true&w=majority"
-
-
-#
-# headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-# data = requests.get('https://www.subway.co.kr/menuList/sandwich',headers=headers)
-# soup = BeautifulSoup(data.text, 'html.parser')
-#content > div > div.pd_list_wrapper > ul > li:nth-child(1) > div.img > img
-
-def get_urls():
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-    data = requests.get('https://www.subway.co.kr/menuList/sandwich', headers=headers)
-    soup = BeautifulSoup(data.text, 'html.parser')
-    trs = soup.select('#content > div > div.pd_list_wrapper > ul')
-    urls = []
-    for tr in trs:
-        a = tr.select_one('li:nth-child(1) > div.img > img')
-        if a is not None:
-            base_url = 'https://www.subway.co.kr/'
-            url = base_url + a['src']
-            urls.append(url)
-
-    return urls
-
-def insert_img(url):
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-    data = requests.get(url, headers=headers)
-
-    soup = BeautifulSoup(data.text, 'html.parser')
-
-    name = soup.select_one('#content > div > div.pd_list_wrapper > ul > li:nth-child(1) > strong')
-    img_url = soup.select_one('#content > div > div.pd_list_wrapper > ul > li:nth-child(1) > div.img > img')['src']
-    cal = soup.select_one(
-        '#content > div > div.pd_list_wrapper > ul > li:nth-child(1) > span.cal').text
-
-    doc = {
-        'name': name,
-        'img_url': img_url,
-        'cal': cal,
-        'url': url
-    }
-
-    db.ingeredients.insert_one(doc)
-    print('완료!', name)
-
-# @app.route('/api/list', methods=['GET'])
-# def show_stars():
-#     movie_star = list(db.mystar.find({},{'_id':False}).sort('like',-1))
-#     return jsonify({'movie_stars': movie_star})
-
-@app.route("/recipe/ingredients", methods=["get"])
-def ingredients_get():
-    all_ingredients = list(db.ingredients.find({}, {'_id' : False}))
-    # print(all_ingredients)
-    # if len(all_ingredients) == 0:
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-    url = 'https://www.subway.co.kr/menuList/sandwich'
-    data = requests.get(url, headers=headers)
-    soup = BeautifulSoup(data.text, 'html.parser')
-    images = soup.select('#content > div > div.pd_list_wrapper > ul > li > div.img > img')
-    print(len(images))
-    for i in images:
-        print('https://www.subway.co.kr' + str(i['src']))
-    return jsonify({'ok': True})
 
 
 @app.route('/post_recipe', methods=['POST'])
@@ -88,9 +31,11 @@ def post_recipe():
     souce_receive = request.form.get('souce')
     menu_receive = request.form.get('menu')
     name_receive = request.form.get('name')
+    additional_receive = request.form.get('additional')
     print(bread_receive, cheese_receive, topping_receive, vege_receive, souce_receive, menu_receive)
     # recipes = mongo.db.recipes
     post = {
+        'additional': additional_receive,
         'bread': bread_receive,
         'cheese': cheese_receive,
         'topping': topping_receive,
@@ -99,28 +44,113 @@ def post_recipe():
         'menu': menu_receive,
         'name': name_receive
     }
-    db.recipe.insert_one(post)
+    db.recipes.insert_one(post)
     # x = ingredients.insert_one(post)
     # print(x.inserted_id)
     # return redirect(url_for("detail", idx=x.inserted_id))
     return jsonify({'name': name_receive+"을 등록하였습니다"})
+    # return render_template('home.html')
 
 
 @app.route('/recipe', methods=['GET'])
 def recipe():
     return render_template('recipe.html')
 
+# 토큰을 위한 시크릿키
+SECRET_KEY = 'SUBLab'
+
+# 인덱스 삭제
+# db.ingredients.drop_indexes()
+
+# 검색을 위한 text 인덱스 생성
+# db.ingredients.create_index([('menu', 'text')]) #메뉴
+db.ingredients.create_index([('$**', 'text')]) #전체
+
+def menu_rank():
+    # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 5위까지만 보여주는 함수
+    menu_ranks = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}, {'$sort': {'avg_star': -1}}, {'$limit': 5}]))
+    return menu_ranks
+
+
 @app.route('/')
 def home():
-    return render_template('home.html')
+    menu_ranks = menu_rank()
+    menu_name = []
+    for menu in menu_ranks:
+        # 메뉴 아이디에 해당되는 메뉴 정보 가져오기
+        m = db.ingredients.find_one({'_id': ObjectId(menu['_id'])})
+        menu_name.append(m['menu'])
 
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
+    token_receive = request.cookies.get('mytoken')
+    if token_receive is not None:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            login_status = 1
+            return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    else:
+        login_status = 0
+        return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
+
+
+@app.route('/search')
+def search():
+    menu_receive = request.args.get('menu_give')
+    # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
+    menu_list = list(db.ingredients.find({'$text': {'$search': menu_receive}}, {'_id': False}))
+    print(menu_list)
+    if len(menu_list) != 0:
+        return render_template('result.html', menu_list=menu_list)
+    else:
+        msg = "검색 결과가 없습니다."
+        menu_list = 0
+        return render_template('result.html', menu_list=menu_list, msg=msg)
 
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/sign-up/check-id', methods=['POST'])
+# check_id() :: id가 동일한 다른 사용자가 DB에 존재하지 않으면 참, 아니면 거짓을 반환.
+def check_id():
+    id_receive = request.form['id_give']
+    exists = bool(db.users.find_one({"id": id_receive}))
+    return jsonify({'ok': not exists})
+
+
+@app.route('/sign-up', methods=['POST'])
+def sign_up():
+    id_receive = request.form['id_give']
+    password_receive = request.form['password_give']
+    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    user = {
+        "id": id_receive,
+        "password": password_hash,
+    }
+    db.users.insert_one(user)
+    return jsonify({'message': '회원가입 되었습니다.'})
+
+
+@app.route('/sign-in', methods=['POST'])
+def sign_in():
+    id_receive = request.form['id_give']
+    password_receive = request.form['password_give']
+    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    user = db.users.find_one({'id': id_receive, 'password': pw_hash})
+    if user is not None:
+        payload = {
+            'id': id_receive,
+            'exp': datetime.utcnow() + timedelta(days=1)  # 로그인 24시간 유지
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        return jsonify({'ok': True, 'token': token})
+    else:
+        return jsonify({'ok': False, 'message': '아이디 혹은 비밀번호가 일치하지 않습니다.'})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

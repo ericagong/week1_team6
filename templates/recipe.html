@@ -34,42 +34,95 @@
             font-family: 'Gowun Dodum', sans-serif;
         }
 
-        .main {
+        .back {
+            background-color: #008c15;
+            margin: 0px auto 0px auto;
+            width: 100%;
+            height: 50%;
+            background-image: url("https://i.ibb.co/pnHmsQC/SUBLab.png");
             position: absolute;
+
+        }
+
+        .select-box {
+            background-color: white;
+            border-radius: 10px;
+            position: absolute;
+            padding: 0px 10px 10px 10px;
             left: 50%;
-            top: 50%;
+            top: 57%;
             transform: translate(-50%, -50%);
             flex-direction: row;
             align-items: flex-start;
             justify-content: space-between;
+            box-shadow: 0px 4px 4px 4px #d3d3d3;
+            min-width: 700px;
+            min-height: 500px;
+            max-height: 1000px;
+            max-width: 1200px;
         }
 
         .bar {
             font-size: 30px;
-            color: #0d730d;
+            color: #008c15;
         }
 
         button {
-            background-color: green;
+            background-color: #008c15;
             font-size: 20px;
             border-radius: 5px;
             color: #ffdf40;
             border: 0;
+            width: 100%;
         }
 
 
         .stitle {
-            color: #0d730d;
+            color: #008c15;
             font-size: 20px;
         }
+
+
+        .container img {
+            width: 40%;
+            height: 30%;
+            margin: 50px auto 0px auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            margin-bottom: 50px;
+        }
+
+        .EX_box {
+            width: 100%;
+            border-radius: 5px;
+            border-top: 2px solid #eee;
+            border-left: 2px solid #eee;
+            border-right: 2px solid #eee;
+            border-bottom: 2px solid #eee;
+        }
+
+        .col-md-10 {
+            width: 100%;
+        }
+
     </style>
 
 </head>
 
 <body>
-<a href="/" target="_blank">
-    <img id="logo" src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab" border="0">
-</a>
+<div class="main container">
+    <a href="/" target="_blank">
+        <img id="logo" src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab" border="0">
+    </a>
+</div>
 
 <script>
     function NoMultiChk(chk) {
@@ -106,21 +159,12 @@
     }
 
 
-    function validBread() {
-        $('#bread').keyup(function () {
-            let input = $('#bread').val();
-            if (input.length >= 2) {
-                $('#bread').removeClass('is-invalid');
-            } else {
-                $('#bread').addClass('is-invalid');
-            }
-        })
-    }
+
 
     $(document).ready(function () {
         check();
         validRN();
-        validBread();
+        invalidItem();
     })
 
     $(document).ready(function () {
@@ -198,14 +242,15 @@
 
 </script>
 
+<div class="back"></div>
+
 <form name="form" method="post" action="/post_recipe">
     <!-- main -->
-    <div class="main">
+    <div class="select-box">
         <!-- buttons -->
         <div class="select">
             <!-- write -->
             <div class="paper">
-                <!--                    <textarea id="post-content" name="name" placeholder=""></textarea>-->
                 <form class="signup-form" id="needs-validation" novalidate>
                     <div class="col-md-10">
                         <label for="RN" class="form-label"></label>
@@ -222,9 +267,6 @@
             <!-- 메뉴-->
             <div class="stitle">메 뉴</div>
             <div class="menu" id="menu">
-                <div class="invalid-feedback">
-                    레시피 이름은 필수적으로 입력해야 합니다.
-                </div>
             </div>
             <div class='checkbox-group'>
                 <label class='checkbox-label'>
@@ -538,13 +580,16 @@
                         <span class='inner-label'>이탈리안 드레싱</span>
                     </label>
                 </div>
-                <!-- button -->
-                <div class="button">
-                    <button type="submit" class="button" onclick="postRecipe()">
-                        레시피 제출
-                    </button>
+                <div class="stitle">레시피 한 줄 소개
+                    <input class="EX_box, form-control" name="additional"type="addtional"required></input>
                 </div>
             </div>
+        </div>
+        <!-- button -->
+        <div class="button">
+            <button type="submit" class="button" onclick="postRecipe()">
+                레시피 제출
+            </button>
         </div>
     </div>
     </div>
