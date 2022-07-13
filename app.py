@@ -17,18 +17,25 @@ db = client.dbsparta
 
 @app.route('/post_recipe', methods=['POST'])
 def post_recipe():
-    bread_receive =  request.form.getlist('bread')
+    # receipe_info = db.recipes.find_one({"_id": ObjectId(menu_id)})
+    # print("recipe페이지 접속했을 때 레시피 아이디 : " + str(receipe_info['_id']))
+
+    bread_receive = request.form.getlist('bread')
     cheese_receive = request.form.getlist('cheese')
     topping_receive = request.form.getlist("topping")
     vege_receive = request.form.getlist('vege')
     souce_receive = request.form.getlist('souce')
-    menu_receive = request.form.getlist('menu')
+    menu_receive = request.form.get('menu')
     name_receive = request.form.getlist('name')
     additional_receive = request.form.getlist('additional')
+    id_receive = request.cookies.get('userID')
+    print('userID')
     # print(bread_receive, cheese_receive, topping_receive, vege_receive, souce_receive, menu_receive)
     # recipes = mongo.db.recipes
     post = {
-        'additional':additional_receive,
+
+        'user_id': id_receive,
+        'additional': additional_receive,
         'bread': bread_receive,
         'cheese': cheese_receive,
         'topping': topping_receive,
@@ -40,8 +47,8 @@ def post_recipe():
     db.recipes.insert_one(post)
     # x = ingredients.insert_one(post)
     # print(x.inserted_id)
-    return redirect(url_for("home", msg=name_receive+"을 등록하였습니다"))
-    # return jsonify({'name': name_receive+"을 등록하였습니다"})
+    #     return jsonify({'name': name_receive+"을 등록하였습니다"})
+    return redirect(url_for('/', msg=name_receive + "을 등록하였습니다"))
 
 
 @app.route('/recipe', methods=['GET'])
