@@ -59,7 +59,6 @@ db.recipes.create_index([('$**', 'text')]) #전체
 def menu_rank():
     # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 4위까지만 보여주는 함수
     menu_ranks = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}, {'$sort': {'avg_star': -1}}, {'$limit': 4}]))
-    print(menu_ranks)
     return menu_ranks
 
 
@@ -74,7 +73,6 @@ def home():
     for menu in menu_ranks:
         # 메뉴 아이디에 해당되는 메뉴 정보 가져오기
         m = db.recipes.find_one({'_id': ObjectId(menu['_id'])})
-        print(m)
         if m is not None:
             menu_name.append(m['menu'])
             menu_id.append(m['_id'])
@@ -103,11 +101,8 @@ def search():
     menu_star_avg = []
     result = []
     for i in range(len(menu_list)):
-        print(menu_list[i]['_id'])
         result = list(db.comments.aggregate([{'$group': {'_id': ObjectId(menu_list[i]['_id']), 'avg_star': {'$avg': '$star'}}}]))
-        print(result)
         menu_star_avg.append(result[0]['avg_star'])
-        print(menu_star_avg)
 
     token_receive = request.cookies.get('mytoken')
     msg = ''
