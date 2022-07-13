@@ -81,9 +81,9 @@ def home():
             login_status = 1
             return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
         except jwt.ExpiredSignatureError:
-            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다.", login_status=login_status))
         except jwt.exceptions.DecodeError:
-            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다.", login_status=login_status))
     else:
         login_status = 0
         return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
@@ -94,12 +94,33 @@ def search():
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
     menu_list = list(db.ingredients.find({'$text': {'$search': menu_receive}}, {'_id': False}))
     print(menu_list)
-    if len(menu_list) != 0:
-        return render_template('result.html', menu_list=menu_list)
+    token_receive = request.cookies.get('mytoken')
+    if token_receive is not None:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            login_status = 1
+            if len(menu_list) != 0:
+                return render_template('result.html', menu_list=menu_list, login_status=login_status)
+            else:
+                msg = "검색 결과가 없습니다."
+                menu_list = 0
+                return render_template('result.html', msg=msg, menu_list=menu_list, login_status=login_status)
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다.", menu_list=menu_list, login_status=login_status))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다.", menu_list=menu_list, login_status=login_status))
     else:
-        msg = "검색 결과가 없습니다."
-        menu_list = []
-        return render_template('result.html', menu_list=menu_list, msg=msg)
+        login_status = 0
+        if len(menu_list) != 0:
+            return render_template('result.html', menu_list=menu_list, login_status=login_status)
+        else:
+            msg = "검색 결과가 없습니다."
+            menu_list = 0
+            return render_template('result.html', msg=msg, menu_list=menu_list, login_status=login_status)
+
+@app.route('/detail')
+def detail():
+    return render_template('detail.html')
 
 @app.route('/login')
 def login():
