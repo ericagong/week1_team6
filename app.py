@@ -135,13 +135,34 @@ def detail():
     receipe_info = db.ingredients.find_one({"_id": ObjectId(menu_id)})
     token_receive = request.cookies.get('mytoken')
     id_receive = request.cookies.get('userID')
-    print(request.cookies)
-    print(menu_id,star,id_receive)
     if token_receive is not None:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         return render_template('detail.html' ,receipe_info=receipe_info, user_id=id_receive, star=star)
     else:
         return render_template('detail.html', receipe_info=receipe_info, user_id=id_receive, star=star)
+
+@app.route('/comment/create', methods=["POST"])
+def add():
+    name_receive = request.form['name_give']
+    address_receive = request.form['comment_give']
+    star_receive = request.form['star_give']
+    menuId_receive = request.form['menuId_give']
+
+    doc = {
+        'name': name_receive,
+        'comment': address_receive,
+        'star': star_receive,
+        'menu_id' : menuId_receive
+    }
+    db.comments.insert_one(doc)
+
+    return jsonify({'msg': '댓글 작성 완료!'})
+
+@app.route("/comment", methods=["GET"])
+def comments_get():
+    comment_list = list(db.comments.find({}, {'_id': False, 'menu_id': False}))
+    print(comment_list)
+    return jsonify({'comments': comment_list})
 
 
 @app.route('/login')

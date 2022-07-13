@@ -160,16 +160,19 @@
     });
 
     function save_comment() {
-        // let name = $('#name').val()
+        let name = $('#user-id').val()
         let comment = $('#comment').val();
         let star = $('#star').val();
+        let menuId = $('#menu-id').val();
         console.log(comment, star);
         $.ajax({
             type: 'POST',
-            url: '/writers',
+            url: '/comment/create',
             data: {
-                'name_give': 'name',
-                'comment_give': comment, 'star_give': star
+                'name_give': name,
+                'comment_give': comment,
+                'star_give': star,
+                'menuId_give': menuId
             },
             success: function (response) {
                 console.log(response)
@@ -182,10 +185,10 @@
     function show_comment() {
         $.ajax({
             type: 'GET',
-            url: '/writers',
+            url: '/comment',
             data: {},
             success: function (response) {
-                let rows = response['writers']
+                let rows = response['comments']
                 for (let i = 0; i < rows.length; i++) {
                     let name = rows[i]['name']
                     let comment = rows[i]['comment']
@@ -208,6 +211,10 @@
 
 </script>
 <body>
+<!-- 메뉴 id와 유저 id 가져가기 위한 필드 -->
+<input id="user-id" value="{{user_id}}" hidden>
+<input id="menu-id" value="{{receipe_info._id}}" hidden>
+
 <div class="service_name">
     <a href="home.html" height="5" width="10">
         <a href="/"><img src="https://i.ibb.co/pnHmsQC/SUBLab.png" alt="SUBLab"></a>
@@ -266,7 +273,6 @@
         <caption></caption>
         <thead>
         <tr>
-
             <th scope="col" id="table_box2">
                 <select class="form-select" id="star">
                     <option selected>-- 선택하기 --</option>
@@ -276,8 +282,6 @@
                     <option value="4">⭐⭐⭐⭐</option>
                     <option value="5">⭐⭐⭐⭐⭐</option>
                 </select>
-</div>
-</th>
 </th>
 <th scope="col" id="table_box3">
     <!—댓글입력 란—>
