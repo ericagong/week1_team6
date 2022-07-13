@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 import certifi
-from flask_pymongo import PyMongo
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from bson.objectid import ObjectId
 import datetime
@@ -10,17 +9,15 @@ import jwt
 
 app = Flask(__name__)
 
-
 ca = certifi.where()
 
 client = MongoClient('mongodb+srv://test:sparta@cluster0.a32x0.mongodb.net/?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
-mongo = PyMongo(app)
 
 
 @app.route('/post_recipe', methods=['POST'])
 def post_recipe():
-    bread_receive = request.form.get('bread')
+    bread_receive =  request.form.get('bread')
     cheese_receive = request.form.get('cheese')
     topping_receive = request.form.get("topping")
     vege_receive = request.form.get('vege')
@@ -63,6 +60,9 @@ def menu_rank():
     # 유저가 만든 레시피 중 평점의 평균이 높은 순으로 5위까지만 보여주는 함수
     menu_ranks = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}, {'$sort': {'avg_star': -1}}, {'$limit': 5}]))
     return menu_ranks
+
+
+SECRET_KEY = 'SUBLab'
 
 
 @app.route('/')
@@ -140,7 +140,7 @@ def sign_in():
             'exp': datetime.utcnow() + timedelta(days=1)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
-        return jsonify({'ok': True, 'token': token})
+        return jsonify({'ok': True, 'token': token, 'userID': id_receive})
     else:
         return jsonify({'ok': False, 'message': '아이디 혹은 비밀번호가 일치하지 않습니다.'})
 
