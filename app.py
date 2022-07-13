@@ -160,7 +160,8 @@ def add():
 
 @app.route("/comment", methods=["GET"])
 def comments_get():
-    comment_list = list(db.comments.find({}, {'_id': False, 'menu_id': False}))
+    menu_id = request.args.get('menu_id')
+    comment_list = list(db.comments.find({'menu_id':ObjectId(menu_id)}, {'_id': False, 'menu_id': False}))
     print(comment_list)
     return jsonify({'comments': comment_list})
 

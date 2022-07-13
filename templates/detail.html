@@ -183,9 +183,10 @@
 
 
     function show_comment() {
+        let menuId = $('#menu-id').val();
         $.ajax({
             type: 'GET',
-            url: '/comment',
+            url: `/comment?menu_id=${menuId}`,
             data: {},
             success: function (response) {
                 let rows = response['comments']
