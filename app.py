@@ -52,7 +52,6 @@ def home():
         login_status = 0
         return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, login_status=login_status)
 
-
 @app.route('/search')
 def search():
     menu_receive = request.args.get('menu_give')
