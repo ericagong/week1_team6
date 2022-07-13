@@ -223,7 +223,7 @@
 </div>
 <div class="main container">
     <div class="recipe_name">
-        <strong><span class="box">{{receipe_info.name}}</span></strong>
+        <strong><span class="box">{{receipe_info.name[0]}}</span></strong>
     </div>
     <div class="writer">
         <div class="writer_box">작성자의 레시피!</div>
@@ -239,30 +239,30 @@
             <div class="total_wrap">
                 <div class="wrap1">
                     <td class="bread"><b>✅ 빵</b><br>
-                        <img src="https://www.subway.co.kr/images/menu/img_recipe_b01.jpg"
-                             height="150px" width="150px">
-                        <br># {{receipe_info.bread}}
+                        {% for bread in receipe_info.bread %}
+                        # {{bread}}
+                        {% endfor%}
                     </td>
                 </div>
                 <div class="wrap2">
                     <td class="topping"><b>✅ 추가 토핑</b><br>
-                        <img src="https://www.subway.co.kr/upload/menu/img_toppping_02.png
-        " height="150px" width="150px">
-                        <br># {{receipe_info.topping}}
+                        {% for topping in receipe_info.topping %}
+                        # {{topping}}
+                        {% endfor%}
                     </td>
                 </div>
                 <div class="wrap3">
                     <td class="sauce"><b>✅ 소스</b><br>
-                        <img src="https://www.subway.co.kr/images/menu/img_recipe_s01.jpg"
-                             height="150px" width="150px">
-                        <br># {{receipe_info.souce}}
+                        {% for souce in receipe_info.souce %}
+                        # {{souce}}
+                        {% endfor%}
                     </td>
                 </div>
                 <div class="wrap4">
                     <td class="cheeze"><b>✅ 치즈</b><br>
-                        <img src="https://www.subway.co.kr/images/menu/img_recipe_c01.jpg"
-                             height="150px" width="150px">
-                        <br># {{receipe_info.cheese}}
+                        {% for cheese in receipe_info.cheese %}
+                        # {{cheese}}
+                        {% endfor%}
                     </td>
                 </div>
             </div>
