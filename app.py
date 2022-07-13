@@ -93,11 +93,11 @@ def home():
         login_status = 0
         return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, menu_id=menu_id, login_status=login_status)
 
-@app.route('/search')
-def search():
-    menu_receive = request.args.get('menu_give')
+@app.route('/search/<keyword>')
+def search(keyword):
+    # menu_receive = request.args.get('menu_give')
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
-    menu_list = list(db.recipes.find({'$text': {'$search': menu_receive}}))
+    menu_list = list(db.recipes.find({'$text': {'$search': keyword}}))
     menu_star_avg = []
     result = []
     for i in range(len(menu_list)):

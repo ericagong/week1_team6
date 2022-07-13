@@ -166,7 +166,8 @@
         <!-- 검색  -->
         function searchMenu() {
             let menuVal = $('#search-menu').val();
-            window.location.href = `/search?menu_give=${menuVal}`;
+            window.location.href = `/search/${menuVal}`;
+            // window.location.href = `/search?menu_give=${menuVal}`;
         }
     </script>
 </head>
