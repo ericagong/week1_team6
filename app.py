@@ -42,13 +42,14 @@ def post_recipe():
         'vege': vege_receive,
         'souce': souce_receive,
         'menu': menu_receive,
-        'name': name_receive
+        'name': name_receive,
+
     }
     db.recipes.insert_one(post)
     # x = ingredients.insert_one(post)
     # print(x.inserted_id)
     #     return jsonify({'name': name_receive+"을 등록하였습니다"})
-    return redirect(url_for('/', msg=name_receive + "을 등록하였습니다"))
+    return home()
 
 
 @app.route('/recipe', methods=['GET'])
@@ -143,7 +144,6 @@ def detail():
     menu_id = request.args.get('menu_id')
     star = request.args.get('avg_star')
     receipe_info = db.recipes.find_one({"_id": ObjectId(menu_id)})
-    print("detail페이지 접속했을 때 레시피 아이디 : "+str(receipe_info['_id']))
     token_receive = request.cookies.get('mytoken')
     id_receive = request.cookies.get('userID')
     if token_receive is not None:

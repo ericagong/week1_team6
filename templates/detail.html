@@ -26,11 +26,13 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+        margin-bottom: 50px;
     }
-
     .service_name {
-        text-align: center;
-        padding-top: 31px;
+            width: 40%;
+            height: 30%;
+            margin: 50px auto 0px auto;
+            text-align: center;
     }
 
     .recipe_name {
@@ -40,30 +42,40 @@
         text-align: center;
         width: 95%;
         max-width: 700px;
-        border: 0;
         solid: green;
         background-color: green;
         height: 60px;
         color: white;
-        font-size: 40px;
+        font-size: 30px;
+        padding-top: 5px;
 
     }
-
-    .writer_box {
+    .writer_rank_box {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        font-size: 50px;
-
+        font-size: 25px;
+        border: 5px solid green;
+        width :95%;
+        max-width: 700px;
+        height: 100px;
+        top : 50%;
     }
+    /*.writer_box {*/
+    /*    position: absolute;*/
+    /*    font-size: 25px;*/
+    /*    border : 5px solid green;*/
+    /*    width: 95%;*/
+    /*    max-width: 700px;*/
+    /*    height: 50px;*/
 
-    .rank_box {
-        position: absolute;
-        top: 60%;
-        left: 50%;
-        font-size: 50px;
+    /*}*/
 
-    }
+    /*.rank_box {*/
+    /*    position: absolute;*/
+    /*    top: 50%;*/
+    /*    left: 50%;*/
+    /*    font-size: 25px;*/
+
+    /*}*/
 
     .table {
         position: absolute;
@@ -98,9 +110,9 @@
 
     .select_list {
         position: absolute;
-        top: 105%;
-        left: 8%;
-        font-size: 20px;
+        top: 80%;
+        margin: 20px auto;
+        font-size: 30px;
         color: dimgray;
         text-align: center;
     }
@@ -225,48 +237,61 @@
     <div class="recipe_name">
         <strong><span class="box">{{receipe_info.name[0]}}</span></strong>
     </div>
+    <div class="writer_rank_box">
     <div class="writer">
-        <div class="writer_box">{{receipe_info.user_id}}의 레시피!</div>
+        <div class="writer_box">작성자 : 레시피!</div>
     </div>
     <div class="rank">
         <div class="rank_box">
-            <p>⭐</p>{{star}}
+            평점 : ⭐{{star}}
         </div>
+        </div>
+<!--            <div class="writer_comment">-->
+<!--        <div class="comment_box">-->
+<!--            한줄평 :-->
+<!--        </div>-->
+<!--        </div>-->
     </div>
 
     <table class="select_list">
-        <tr>
             <div class="total_wrap">
                 <div class="wrap1">
-                    <td class="bread"><b>✅ 빵</b><br>
+                    <tr><td class="bread"><b>✅ 빵</b><br>
                         {% for bread in receipe_info.bread %}
                         # {{bread}}
                         {% endfor%}
-                    </td>
+                        <p></p>
+                        <p></p>
+                    </td></tr>
                 </div>
                 <div class="wrap2">
-                    <td class="topping"><b>✅ 추가 토핑</b><br>
+                    <tr><td class="topping"><b>✅ 추가 토핑</b><br>
                         {% for topping in receipe_info.topping %}
                         # {{topping}}
                         {% endfor%}
-                    </td>
+                        <p></p>
+                        <p></p>
+                    </td></tr>
                 </div>
                 <div class="wrap3">
-                    <td class="sauce"><b>✅ 소스</b><br>
+                    <tr><td class="sauce"><b>✅ 소스</b><br>
                         {% for souce in receipe_info.souce %}
                         # {{souce}}
                         {% endfor%}
-                    </td>
+                        <p></p>
+                        <p></p>
+                    </td></tr>
                 </div>
                 <div class="wrap4">
-                    <td class="cheeze"><b>✅ 치즈</b><br>
+                    <tr><td class="cheeze"><b>✅ 치즈</b><br>
                         {% for cheese in receipe_info.cheese %}
                         # {{cheese}}
                         {% endfor%}
-                    </td>
+                        <p></p>
+                        <p></p>
+                    </td></tr>
                 </div>
             </div>
-        </tr>
     </table>
 </div>
 <div class="table">
