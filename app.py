@@ -108,11 +108,19 @@ def search(keyword):
     # menu_receive = request.args.get('menu_give')
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
     menu_list = list(db.recipes.find({'$text': {'$search': keyword}}))
+    print("menu_list:",menu_list[0]['_id'])
     menu_star_avg = []
     result = []
     for i in range(len(menu_list)):
-        result = list(db.comments.aggregate([{'$group': {'_id': ObjectId(menu_list[i]['_id']), 'avg_star': {'$avg': '$star'}}}]))
-        menu_star_avg.append(result[0]['avg_star'])
+        # 댓글 DB에서 menu_id가 있는지 찾는다.
+        find_menu_id = db.comments.find_one({'menu_id':ObjectId(menu_list[i]['_id'])},{'_id':False})
+        # 없으면 0을 추가
+        if not find_menu_id:
+            menu_star_avg.append(0.0)
+        else:
+            # 있으면 값을 추가
+            result = list(db.comments.aggregate([{'$group': {'_id': '$menu_id', 'avg_star': {'$avg': '$star'}}}]))
+            menu_star_avg.append(round(result[0]['avg_star'], 1))
 
     token_receive = request.cookies.get('mytoken')
     msg = ''
