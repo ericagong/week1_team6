@@ -119,13 +119,27 @@
 
         .list-row {
             width: 100%;
+            border: 1px solid #DFDFDF;
+            height: 70px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 5px;
+
+            cursor: pointer;
         }
     </style>
     <script>
         <!-- 검색  -->
         function searchMenu() {
             let menuVal = $('#search-menu').val();
-            window.location.href = `/search?menu_give=${menuVal}`;
+             window.location.href = `/search/${menuVal}`;
+            // window.location.href = `/search?menu_give=${menuVal}`;
         }
     </script>
 </head>
@@ -153,7 +167,7 @@
             {% endif %}
         </div>
         <div class="input-group mb-3">
-            <input type="text" id="search-menu" class="form-control" placeholder="메뉴 이름 검색" aria-label="Recipient's username"
+            <input type="text" id="search-menu" class="form-control" placeholder="메뉴 이름 또는 재료 검색" aria-label="Recipient's username"
                    aria-describedby="button-addon2">
             <button class="recipe-btn btn btn-outline-secondary" type="button" id="button-addon2"
                     onclick="searchMenu()">검색
@@ -163,7 +177,7 @@
         <script>
             $('.container').addClass('login-status-bottom');
         </script>
-        <button type="button" class="w-100 btn btn-success">레시피 등록</button>
+        <button type="button" class="w-100 btn btn-success" onclick="window.location.href='/recipe'">레시피 등록</button>
         {% endif %}
     </div>
 
@@ -172,12 +186,11 @@
             {% if menu_list != 0 %}
             {% for menu in menu_list %}
             <div class="list-row">
-                <a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                    <div class="menu-item d-flex w-100 justify-content-between">
+                    <div class="menu-item d-flex w-100 justify-content-between" onclick="window.location.href=`/detail?menu_id={{menu_list[loop.index0]['_id']}}&avg_star={{menu_ranks[loop.index0]}}`">
                         <img src="https://i.ibb.co/pwqc5nc/subwaylogo.png">
-                        <h5 class="mb-1">{{menu.menu}}</h5>
-                        <p class="mb-1">평점 : 4</p>
-                        <small>{{menu.name}}</small>
+                        <h5 class="mb-1">{{menu.name}}</h5>
+                        <p class="mb-1">평점 : {{menu_ranks[loop.index0]}}</p>
+                        <small>{{menu.menu}}</small>
                     </div>
                 </a>
             </div>

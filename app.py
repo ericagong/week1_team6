@@ -82,9 +82,12 @@ def home():
     for menu in menu_ranks:
         # 메뉴 아이디에 해당되는 메뉴 정보 가져오기
         m = db.recipes.find_one({'_id': ObjectId(menu['_id'])})
-        print(m)
-        menu_name.append(m['menu'])
-        menu_id.append(m['_id'])
+        if m is not None:
+            menu_name.append(m['menu'])
+            menu_id.append(m['_id'])
+        else:
+            menu_name = 0
+            menu_id = 0
     token_receive = request.cookies.get('mytoken')
     if token_receive is not None:
         try:
@@ -99,19 +102,16 @@ def home():
         login_status = 0
         return render_template('home.html', menu_ranks=menu_ranks, menu_name=menu_name, menu_id=menu_id, login_status=login_status)
 
-@app.route('/search')
-def search():
-    menu_receive = request.args.get('menu_give')
+@app.route('/search/<keyword>')
+def search(keyword):
+    # menu_receive = request.args.get('menu_give')
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
-    menu_list = list(db.recipes.find({'$text': {'$search': menu_receive}}))
+    menu_list = list(db.recipes.find({'$text': {'$search': keyword}}))
     menu_star_avg = []
     result = []
     for i in range(len(menu_list)):
-        print(menu_list[i]['_id'])
         result = list(db.comments.aggregate([{'$group': {'_id': ObjectId(menu_list[i]['_id']), 'avg_star': {'$avg': '$star'}}}]))
-        print(result)
         menu_star_avg.append(result[0]['avg_star'])
-        print(menu_star_avg)
 
     token_receive = request.cookies.get('mytoken')
     msg = ''
