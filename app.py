@@ -108,7 +108,6 @@ def search(keyword):
     # menu_receive = request.args.get('menu_give')
     # 전체 속성에서 검색어를 포함하는 메뉴 리스트 반환
     menu_list = list(db.recipes.find({'$text': {'$search': keyword}}))
-    print("menu_list:",menu_list[0]['_id'])
     menu_star_avg = []
     result = []
     for i in range(len(menu_list)):
